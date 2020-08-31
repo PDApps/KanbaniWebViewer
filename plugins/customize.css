@@ -1,0 +1,33 @@
+/* cardColor */
+.lists_bg-mode_bg .card-item_bg_1,
+.lists_bg-mode_fg .card-item_bg_1 .card-item__name  { background-color: #fffad6; }
+.lists_bg-mode_bg .card-item_bg_2,
+.lists_bg-mode_fg .card-item_bg_2 .card-item__name  { background-color: #fff0d7; }
+.lists_bg-mode_bg .card-item_bg_3,
+.lists_bg-mode_fg .card-item_bg_3 .card-item__name  { background-color: #ffdede; }
+.lists_bg-mode_bg .card-item_bg_4,
+.lists_bg-mode_fg .card-item_bg_4 .card-item__name  { background-color: #ffdff0; }
+.lists_bg-mode_bg .card-item_bg_5,
+.lists_bg-mode_fg .card-item_bg_5 .card-item__name  { background-color: #eadffb; }
+.lists_bg-mode_bg .card-item_bg_6,
+.lists_bg-mode_fg .card-item_bg_6 .card-item__name  { background-color: #d9e8ff; }
+.lists_bg-mode_bg .card-item_bg_7,
+.lists_bg-mode_fg .card-item_bg_7 .card-item__name  { background-color: #d7faff; }
+.lists_bg-mode_bg .card-item_bg_8,
+.lists_bg-mode_fg .card-item_bg_8 .card-item__name  { background-color: #cff3e7; }
+.lists_bg-mode_bg .card-item_bg_9,
+.lists_bg-mode_fg .card-item_bg_9 .card-item__name  { background-color: #d7f7d5; }
+.lists_bg-mode_bg .card-item_bg_10,
+.lists_bg-mode_fg .card-item_bg_10 .card-item__name { background-color: #e0e6ef; }
+
+/* relatedName */
+.card-item__rel {
+    text-align: right;
+    font-style: italic;
+    color: teal;
+    float: right;
+}
+
+.cust-rnfilter .card-item__rel {
+    display: none;
+}

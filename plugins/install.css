@@ -1,0 +1,21 @@
+[data-kwv-inst] label {
+    display: block;
+}
+
+.inst_transp_no .inst__transp-cfg,
+.inst_auth_no .inst__auth-cfg {
+    display: none;
+}
+
+.inst__code,
+.inst__warn {
+    padding: .01em 0 .01em 1em;
+}
+
+.inst__warn {
+    border-left: .5em dotted red;
+}
+
+.inst__code {
+    border-left: .5em dotted blue;
+}

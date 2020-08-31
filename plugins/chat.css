@@ -1,0 +1,50 @@
+.chat__title {
+    transition: background-color .25s;
+}
+
+.chat__title_others {
+    background-color: white;
+}
+
+.chat_update .chat__title,
+.chat__title_flash {
+    background-color: orange;
+    animation: chat__title_flash .25s;
+}
+
+@keyframes chat__title_flash {
+    50%  { background-color: white; }
+}
+
+.chat__help {
+    font-weight: bold;
+}
+
+.chat__msgs {
+    width: 40em;
+    max-height: 50vh;
+    overflow: auto;
+    margin: -1em 0;
+}
+
+.chat__msgs:not(:empty) ~ .chat__empty {
+    display: none;
+}
+
+.chat__empty {
+    margin: 2em 0 1em; /* chat__msgs */
+    color: gray;
+}
+
+.chat__new-msg {
+    font-weight: bold;
+    color: red;
+}
+
+.chat__update {
+    background: yellow;
+}
+
+.chat:not(.chat_update) .chat__update {
+    display: none;
+}

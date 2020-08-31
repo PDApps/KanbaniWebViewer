@@ -1,0 +1,3 @@
+[submodule "kanbani-data"]
+	path = kanbani-data
+	url = https://github.com/PDApps/KanbaniDataPHP.git

@@ -1,0 +1,561 @@
+/* https://pdapps.org/kanbani/web | License: MIT */
+/* Stick to BEM notation: https://bem.info */
+
+* { box-sizing: border-box; }
+a:not(:hover) { text-decoration: none; }
+abbr { cursor: help; }
+
+body {
+    margin: 0;
+    background: no-repeat center center #eee;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+/*
+    <div class="body-overlay__shader">
+    <div class="body-overlay">
+        <div class="body-overlay__content">
+*/
+.body-overlay__shader,
+.body_shaded:before {
+    content: "";
+    background: #0008;
+}
+
+.body-overlay__shader,
+.body_shaded:before,
+.body-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.body-overlay {
+    z-index: 2;
+    overflow: auto;
+}
+
+.body-overlay__content {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 90%;
+}
+
+/*
+    <body class="middle body_full">         +-------+ <body "middle">
+        <div class="middle__out">           |       |
+            <div class="middle__in">        |   O   | < "middle__in"
+        [middle__in_left | middle__in_pad]  |       |
+                ...actual content...        +-------+
+*/
+.middle {
+    display: table;
+    width: 100%;
+}
+
+.middle__out {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.middle__in {
+    display: inline-block;
+    max-width: 50em;
+    margin: 1em;    /* leave space around content sticking to page borders */
+}
+
+.middle__in_left {
+    text-align: left;
+}
+
+.middle__in_pad,
+.middle__in_left {
+    padding: 0 1em;
+}
+
+.page__in .page__h1,
+.middle__in_left .middle__h1 {
+    text-align: center;
+}
+
+.middle__list {
+    text-align: left;
+}
+
+/* General purpose classes */
+.light-shade {
+    border: .06em solid #d3d3d3;
+    border-bottom-color: #999;
+}
+
+.block-area {
+    display: block;
+    width: 100%;
+    margin: 1em 0;
+    padding: .5em;
+    resize: vertical;
+}
+
+.isle {
+    font-size: .875em;
+    padding: .25em .5em;
+}
+
+.filtered { display: none; }
+
+.page__in {
+    margin: 1em;
+    padding: .01em 1em;
+}
+
+.round,
+.page__in,
+.middle__in,
+.light-shade,
+.isle,
+.info-hint__hint {
+    border-radius: .3em;
+}
+
+.list-hdr {
+    border-radius: .3em .3em 0 0;
+}
+
+.list__cards {
+    border-radius: 0 0 .3em .3em;
+    overflow: auto;     /* even in bv_vert, include bottom padding after last card */
+}
+
+/*
+    <div class="switch">
+        <div class="switch__item switch__item_n_123 [switch__item_visible]">
+*/
+.js_no .switch__go,
+.js_yes .switch__item:not(.switch__item_visible) {
+    display: none;
+}
+
+/*
+    <table class="tbl">
+        <tr class="tbl__grp">
+            <th colspan="123">
+        <tr>
+            <th class="tbl__th">
+*/
+.tbl {
+    margin: 1em 0;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.tbl > * > * > * {
+    padding: .5em;
+    border-bottom: .06em dashed #e3e3e3;
+}
+
+.tbl__grp {
+    text-align: center;
+}
+
+.tbl__th {
+    background: #eee;
+}
+
+/*
+    <span class="info-hint [info-hint_relative] [info-hint_visible]">
+        <span class="info-hint__title">
+        <div class="info-hint__hint">
+            <table class="tbl info-hint__tbl">
+            <img class="info-hint__block-img [info-hint__block-img_max-height]">
+            <hr class="info-hint__hr">
+*/
+.info-hint:not(:hover):not(.info-hint_visible) .info-hint__hint {
+    display: none;
+}
+
+.info-hint_relative {
+    /* Warning: .info-hint__hint will clip in a container with overflow: hidden */
+    position: relative;
+}
+
+.info-hint__title {
+    text-decoration: underline dotted;
+}
+
+.info-hint_visible .info-hint__title:before { content: "["; }
+.info-hint_visible .info-hint__title:after { content: "]"; }
+
+.info-hint_relative .info-hint__hint {
+    left: 0;
+}
+
+.info-hint__hint {
+    position: absolute;
+    z-index: 10;
+    background: white;
+    padding: 0 1em;
+    box-shadow: 0 0 1em gray;
+    font-size: .875em;
+    max-width: 50em;
+}
+
+.info-hint__hr {
+    border: 0;
+    border-bottom: .06em solid #999;
+}
+
+.info-hint__tbl {
+    width: 100%;
+}
+
+.info-hint__block-img {
+    display: block;
+    margin: .5em 0;
+}
+
+.info-hint__block-img_max-height {
+    max-height: 6em;
+}
+
+/* Invisible placeholder to prevent accidental hiding of the hint when moving
+   cursor inside it but going slightly off the path along the way. */
+.info-hint__hint:before {
+    display: block;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 1em;
+    left: 0;
+    top: -1em;
+}
+
+.info-hint:hover .info-hint__title {
+    position: relative;
+    z-index: 11; /* > z-index of .info-hint__hint to overlay :before to allow toggling by click */
+}
+
+/* The board template's styles */
+@media screen {
+    html,
+    body.body_full,
+    .bv_horiz,
+    .bv_horiz .lists__list,
+    .lists__list-resizer {
+        height: 100%;
+    }
+
+    .bv_vert .horiz-bar {
+        position: sticky;
+        top: 0;
+    }
+
+    .bv_horiz .horiz-bar {
+        white-space: nowrap;
+    }
+
+    .bv_horiz .horiz-bar__child {
+        white-space: normal;
+        min-width: 38em;
+    }
+
+    .bv_horiz .lists__list-resizer,
+    .bv_horiz .lists__list {
+        width: 20em;
+        display: inline-block;
+        vertical-align: top;
+        white-space: normal;
+    }
+
+    .bv_horiz .lists {
+        height: calc(100% - 2.6em);     /* padding + height of horiz-bar */
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+    .bv_horiz .list__cards {
+        max-height: calc(100% - 1em - 1em - 1em);
+            /* body height - horiz-bar height - margin† - list-hdr height */
+            /* †between .horiz-bar and .lists */
+    }
+
+    .bv_horiz * + .lists__list {
+        margin-left: .5em;
+    }
+
+    .bv_vert .lists__list {
+        margin-bottom: .5em;
+    }
+
+    .bv_horiz .lists:after {
+        content: "";
+        display: inline-block;
+        width: 28em;     /* drag area & empty space for info-hints */
+    }
+
+    .bv_horiz .lists__list-resizer {
+        width: .5em;
+        margin-left: -.5em;
+        cursor: ew-resize;
+    }
+
+    .lists {
+        padding: 0 .5em;
+    }
+}
+
+.horiz-bar {
+    padding: .5em;
+}
+
+.share-hint__right {
+    float: right;
+    margin: 0 0 1em 1em;
+}
+
+.hdr__name,
+.list-hdr__name {
+    display: inline;
+}
+
+.list-hdr__name {
+    font-size: 1em;
+}
+
+.isle,
+.list-hdr,
+.list__cards {
+    background: #e3e3e3cc;
+}
+
+.page__in,
+.middle__in {
+    background: #e3e3e3ee;
+}
+
+.hdr__filter {
+    border: 0;
+    transition: width .15s;
+    width: 10em;
+}
+
+.hdr__filter:focus {
+    background: white;
+    box-shadow: 0 0 10em 10em #0008;
+    width: 25em;
+}
+
+[data-kwv-override],
+.js_yes .hdr__submit {
+    display: none;
+}
+
+.list:target .list-hdr,
+.list:target .list__cards {
+    background: #69ff00cc;
+}
+
+.card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list-hdr {
+    padding: .5em 3.75em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.list-hdr__hint {
+    float: right;
+    margin-right: -3em;
+}
+
+.bv_vert .list-hdr__hint-hint {
+    position: absolute;
+    right: .25em;
+}
+
+.list-hdr__hint-title {
+    width: 2em;    /* easier hover */
+    display: inline-block;
+    text-align: right;      /* prevents jumping hint due to title content length change */
+}
+
+.card-list__item {
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+.card-list__item {
+    margin-bottom: .5em;
+}
+
+.card-item,
+.list-empty {
+    padding: .5em;
+}
+
+.card-item {
+    background: white;
+    overflow: auto;     /* floating card-item__rel */
+}
+
+.card-item:target {
+    background: #c7ff9f;
+    background: linear-gradient(#d7f7d5, #c7ff9f);
+    border-color: #35a72e;
+}
+
+.cust__override {
+    margin-right: .5em;
+}
+
+.cust__override {
+    outline-offset: -1px;
+}
+
+.cust__override:not(:hover) {
+    outline: 1px dashed white;
+}
+
+.cust__override:checked {
+    outline: 1px solid red;
+}
+
+.hdr__encr,
+.card-due_over_1 {
+    background: #fe5;
+}
+
+.card-item__label {
+    font-size: .75em;
+}
+
+.card-item__name {
+    font-size: 1em;
+    margin: 0;
+}
+
+.card-item__name a {
+    display: block;
+    color: inherit;
+}
+
+.card-item__labels,
+.card-item__name,
+.card-item__desc,
+.card-item__desc-snip {
+    margin-bottom: .5em;
+}
+
+.card-item__desc,
+.card-item__desc-snip {
+    margin-top: .5em;
+}
+
+.card-item__desc-snip:not(.filtered) /*else would override filtered's display: none*/ {
+    background: transparent;
+    border: 0;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    resize: vertical;
+}
+
+.bv_vert .card-item__desc-snip,
+.bv_horiz .card-item__desc {
+    display: none;
+}
+
+.card-item__due {
+    display: inline-block;
+}
+
+.card-item__hint-title {
+    color: gray;
+}
+
+.ex__wr {
+    background: #aa1212b3;
+    padding: .5em 2em;
+    color: white;
+}
+
+.card-det__custom,
+.ex__trace {
+    height: 10em;
+    white-space: pre;
+}
+
+/* The card template's styles */
+.body__card-det {
+    max-width: 50em;
+    background: #e3e3e3;
+    margin: 2em auto 1em;
+    position: relative;  /* overlay body_shaded */
+    box-shadow: 0 0 1em black;
+}
+
+.card-det {
+    padding: 1em 14em 1em 1em;
+}
+
+.card-det:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.card-det__name {
+    margin: 0;
+}
+
+.card-det__loc {
+    margin: .5em 0 1.5em 0;
+}
+
+.card-labels__label + .card-labels__label {
+    margin-left: .5em;
+}
+
+.card-det__labels {
+    margin-bottom: 1em;
+}
+
+.card-det__label {
+    background: #eee;
+}
+
+.card-det__desc-wr {
+    background: white;
+    padding: .1px 1em;
+}
+
+.card-det__info {
+    margin: .5em -13em 0 0;  /* card-det padding-right - right of this */
+    width: 12em;
+    float: right;
+    color: gray;
+    word-wrap: break-word;
+}
+
+.card-det__info dt {
+    font-weight: bold;
+}
+
+.card-det__info dd {
+    margin: 0.5em 0 1em;
+}
+
+.card-export__item + .card-export__item:before {
+    content: " • ";
+    color: gray;  /* of card-det__info */
+}
