@@ -1,13 +1,13 @@
 // Requires that target object has a node property (Element).
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'descLines'
+    this.name = this.name || "descLines"
 
     this._apply = function (target, value) {
-        target.node.querySelectorAll('.card-item__desc-snip')
+        target.node.querySelectorAll(".card-item__desc-snip")
             .forEach(function (node) {
-                node.setAttribute('rows', value)
-                node.classList.toggle('filtered', value < 1)
+                node.setAttribute("rows", value)
+                node.classList.toggle("filtered", value < 1)
             })
     }
 })
@@ -15,11 +15,11 @@ KanbaniWeb.customizers.push(function () {
 // Requires that target object has a node property (Element).
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'descDir'
+    this.name = this.name || "descDir"
 
     this._apply = function (target, value) {
         var value = value ? 1000000 : 0
-        target.node.querySelectorAll('.card-item__desc-snip')
+        target.node.querySelectorAll(".card-item__desc-snip")
             .forEach(function (node) {
                 node.scrollTo(value, value)
             })
@@ -29,16 +29,16 @@ KanbaniWeb.customizers.push(function () {
 // Requires that target object has a node property (Element).
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'descBreaks'
+    this.name = this.name || "descBreaks"
     this.default = false
     this.preview = null
 
     this._apply = function (target) {
         var preserve = this.node.checked
-        target.node.querySelectorAll('.card-item__desc-snip')
+        target.node.querySelectorAll(".card-item__desc-snip")
             .forEach(function (node) {
                 // en spaces below
-                node.value = node.value.replace(preserve ? / /g : /\n/g, preserve ? '\n' : ' ')
+                node.value = node.value.replace(preserve ? / /g : /\n/g, preserve ? "\n" : " ")
             })
     }
 

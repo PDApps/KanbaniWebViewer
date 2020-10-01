@@ -3,7 +3,7 @@
 namespace Kanbani;
 use stdClass;
 
-$context->hooks->register('serve_import', function () {
+$context->hooks->register("serve_import", function () {
     if ($this->request["format"] === "json") {
         $boards = json_decode(file_get_contents($this->files["upload"]["tmp_name"]));
         if (isset($boards->sync_version)) {
@@ -16,14 +16,14 @@ $context->hooks->register('serve_import', function () {
     }
 });
 
-$context->hooks->register('serve_import', function () {
+$context->hooks->register("serve_import", function () {
     if ($this->request["format"] === "kanbani") {
         $data = new SyncData;
         $data->unserializeFileUsing(
             $file = new SyncFile,
             $this->files["upload"]["tmp_name"],
-            $this->request['secret'] ?? '',
-            $this->request['boardID'] ?? '');
+            $this->request["secret"] ?? "",
+            $this->request["boardID"] ?? "");
         $this->syncData($data, $file)
             ->hooks->serve_viewBoard();
         return true;
@@ -40,13 +40,13 @@ $importCSV = function ($path, $separator) {
     }
     $boards = $lists = $cards = [];
     // Remember: quoted strings may span multiple lines.
-    $re = '/(?:"((?:[^"]|"")*)"|([^"]*))(?:'.$separator.'|(\r?\n))/u';
+    $re = '/(?:"((?:[^"]|"")*)"|([^"]*?))(?:'.$separator.'|(\r?\n))/u';
     if (preg_match_all($re, $file, $matches)) {
         $start = 0;
         foreach (array_filter($matches[3]) as $i => $str) {
             $parts = [];
             for (; $start <= $i; ++$start) {
-                if ($matches[1][$start] === '') {
+                if ($matches[1][$start] === "") {
                     $parts[] = $matches[2][$start];
                 } else {
                     $parts[] = preg_replace('/""/u', '"', $matches[1][$start]);
@@ -54,18 +54,18 @@ $importCSV = function ($path, $separator) {
             }
             if (!$parts) {
                 continue;
-            } elseif ($parts[0] === 'board') {
-                $board = $unpack($parts, ['id', 'create_time', 'title', 'custom']);
+            } elseif ($parts[0] === "board") {
+                $board = $unpack($parts, ["id", "create_time", "title", "custom"]);
                 $board->field_history = new stdClass;
                 $board->lists = [];
                 $boards[$board->id] = $board;
-            } elseif ($parts[0] === 'list') {
-                $list = $unpack($parts, ['id', 'create_time', 'title', 'custom', '_parent']);
+            } elseif ($parts[0] === "list") {
+                $list = $unpack($parts, ["id", "create_time", "title", "custom", "_parent"]);
                 $list->field_history = new stdClass;
                 $list->cards = [];
                 $lists[$list->id] = $list;
-            } elseif ($parts[0] === 'card') {
-                $card = $unpack($parts, ['id', 'create_time', 'title', 'custom', '_parent', 'create_user', 'change_time', 'related_name', 'color', 'description', 'due_time', 'archived']);
+            } elseif ($parts[0] === "card") {
+                $card = $unpack($parts, ["id", "create_time", "title", "custom", "_parent", "create_user", "change_time", "related_name", "color", "description", "due_time", "archived"]);
                 $card->field_history = new stdClass;
                 $card->move_history = [];
                 $cards[$card->id] = $card;
@@ -88,16 +88,16 @@ $importCSV = function ($path, $separator) {
     }
     return array_values($boards);
 };
-$context->hooks->register('serve_import', function () use ($importCSV) {
+$context->hooks->register("serve_import", function () use ($importCSV) {
     if ($this->request["format"] === "xcsv") {
-        $this->syncData(new SyncData($importCSV($this->files["upload"]["tmp_name"], ';')))
+        $this->syncData(new SyncData($importCSV($this->files["upload"]["tmp_name"], ";")))
             ->hooks->serve_viewBoard();
         return true;
     }
 });
-$context->hooks->register('serve_import', function () use ($importCSV) {
+$context->hooks->register("serve_import", function () use ($importCSV) {
     if ($this->request["format"] === "csv") {
-        $this->syncData(new SyncData($importCSV($this->files["upload"]["tmp_name"], ',')))
+        $this->syncData(new SyncData($importCSV($this->files["upload"]["tmp_name"], ",")))
             ->hooks->serve_viewBoard();
         return true;
     }
@@ -126,35 +126,35 @@ $context->hooks->register("serve_import", function () {
     foreach ($lines as $line) {
         $clean = preg_replace('/^\s*|\s*$/u', "", $line);
         if (!$list) {
-            if ($clean === '') {
+            if ($clean === "") {
                 continue;
             }
             $lists[] = $list = (object) [
-                'id'            => QrCodeData::randomIdentifier(),
-                'create_time'   => time() * 1000,
-                'title'         => $clean,
-                'field_history' => new stdClass,
-                'custom'        => '',
-                'cards'         => [],
+                "id"            => QrCodeData::randomIdentifier(),
+                "create_time"   => time() * 1000,
+                "title"         => $clean,
+                "field_history" => new stdClass,
+                "custom"        => "",
+                "cards"         => [],
             ];
         } elseif (!$card) {
-            if ($clean === '') {
+            if ($clean === "") {
                 continue;
             }
             $list->cards[] = $card = (object) [
-                'id'            => QrCodeData::randomIdentifier(),
-                'create_time'   => time() * 1000,
-                'title'         => $clean,
-                'field_history' => new stdClass,
-                'custom'        => '',
-                'related_name'  => null,
-                'description'   => null,
-                'color'         => 0,
-                'due_time'      => null,
-                'archived'      => false,
-                'create_user'   => $this('Kanbani Web Viewer'),
-                'change_time'   => time() * 1000,
-                'move_history'  => [],
+                "id"            => QrCodeData::randomIdentifier(),
+                "create_time"   => time() * 1000,
+                "title"         => $clean,
+                "field_history" => new stdClass,
+                "custom"        => "",
+                "related_name"  => null,
+                "description"   => null,
+                "color"         => 0,
+                "due_time"      => null,
+                "archived"      => false,
+                "create_user"   => $this("Kanbani Web Viewer"),
+                "change_time"   => time() * 1000,
+                "move_history"  => [],
             ];
         } elseif ($card->related_name === null) {
             $card->related_name = $clean;
@@ -175,7 +175,7 @@ $context->hooks->register("serve_import", function () {
                 $list = $card = null;
                 continue;
             }
-            if ($card->description === null && $clean === '') {
+            if ($card->description === null && $clean === "") {
                 continue;
             }
             if ($card->description !== null) {
@@ -186,17 +186,17 @@ $context->hooks->register("serve_import", function () {
     }
     foreach ($lists as $list) {
         foreach ($list->cards as $card) {
-            $card->description = preg_replace('/\s+$/u', '', $card->description);
+            $card->description = preg_replace('/\s+$/u', "", $card->description);
         }
     }
     $board = (object) [
-        'id'            => QrCodeData::randomIdentifier(),
-        'create_time'   => time() * 1000,
-        'title'         => basename($this->files['upload']['name'],
-        '.txt'),
-        'field_history' => new stdClass,
-        'custom'        => '',
-        'lists'         => $lists,
+        "id"            => QrCodeData::randomIdentifier(),
+        "create_time"   => time() * 1000,
+        "title"         => basename($this->files["upload"]["name"],
+        ".txt"),
+        "field_history" => new stdClass,
+        "custom"        => "",
+        "lists"         => $lists,
     ];
     $this->syncData(new SyncData([$board]))
         ->hooks->serve_viewBoard();
@@ -204,7 +204,7 @@ $context->hooks->register("serve_import", function () {
 });
 
 $context->hooks->register("serve_import", function () {
-    if ($this->request["format"] === 'tjson') {
+    if ($this->request["format"] === "tjson") {
         $data = json_decode(file_get_contents($this->files["upload"]["tmp_name"]));
         $cards = [];
         foreach ($data->cards as $card) {
@@ -256,9 +256,9 @@ $context->hooks->registerFirst("echo_boardImport", function (array $vars) {
 ?>
     <button <?=$attrs?>"xcsv">Excel</button>
     <button <?=$attrs?>"csv">CSV</button>
-    <button <?=$attrs?>"json" title="<?=$this("Accepts full form (with sync_version) and short form (array of boards)")?>">JSON</button>
-    <button <?=$attrs?>"txt" title="<?=$this("See Kanbani Web Viewer's homepage for format details")?>"><?=$this('Text')?></button>
-    <button <?=$attrs?>"tjson"><?=$this('Trello JSON')?></button>
+    <button <?=$attrs?>"json" title="<?=$this("Accepts full form (with sync_version) and short form (array of boards).")?>">JSON</button>
+    <button <?=$attrs?>"txt" title="<?=$this("See Kanbani Web Viewer’s homepage for format details.")?>"><?=$this("Text")?></button>
+    <button <?=$attrs?>"tjson"><?=$this("Trello JSON")?></button>
 <?php
 });
 

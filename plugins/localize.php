@@ -1,6 +1,6 @@
 <?php
 /* This plugin translates default English strings into another language and provides
-   Customize options for switching display language and timezone. */
+   Customize options for switching display language and time zone. */
 
 $languages = [];
 foreach (glob("localizations/*.php") as $file) {
@@ -13,8 +13,8 @@ if (!in_array("en", $languages)) {
     $languages[] = "en";
 }
 
-$context->hooks->register('start', function () use ($languages) {
-    $accept = $this->request["lang"] ?? $this->cookie("kwvlang") ?? $this->server["HTTP_ACCEPT_LANGUAGE"] ?? '';
+$context->hooks->register("start", function () use ($languages) {
+    $accept = $this->request["lang"] ?? $this->cookie("kwvlang") ?? $this->server["HTTP_ACCEPT_LANGUAGE"] ?? "";
     if (preg_match_all('/\w\w(-\w\w)?/', strtolower($accept), $matches)) {
         foreach ($matches[0] as $lang) {
             if (strlen($lang) > 2 && !in_array($lang, $languages)) {
@@ -38,7 +38,7 @@ $context->hooks->register('start', function () use ($languages) {
     }
 });
 
-$context->hooks->register('echo_empty', function (array &$vars) {
+$context->hooks->register("echo_empty", function (array &$vars) {
     $tz = &$vars["bodyAttributes"]["data-tz"];
     $tz = $this->tz;
 });
@@ -60,7 +60,7 @@ $context->hooks->registerFirst("echo_boardCustomize", function () use ($language
 ?>
         <?php if (count($languages) > 1) {?>
             <tr>
-                <th class="tbl__th"><?=$this("Language:")?></th>
+                <th class="tbl__th"><?=$this("Language (%s):", "language")?></th>
                 <td>
                     <select name="lang">
                         <?=Kanbani\htmlOptions($languages, $languages, $this->language)?>
@@ -69,7 +69,7 @@ $context->hooks->registerFirst("echo_boardCustomize", function () use ($language
             </tr>
         <?php }?>
         <tr>
-            <th class="tbl__th"><?=$this("Timezone:")?></th>
+            <th class="tbl__th"><?=$this("Time zone:")?></th>
             <td>
                 <select name="tz">
                     <?=Kanbani\htmlOptions($zones, $zones, $this->tz)?>

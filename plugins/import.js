@@ -1,5 +1,5 @@
-document.querySelectorAll('.import__group-input').forEach(function (node) {
-    node.addEventListener('keydown', function (e) {
+document.querySelectorAll(".import__group-input").forEach(function (node) {
+    node.addEventListener("keydown", function (e) {
         if (e.keyCode == 13) {
             // Import form has multiple connected buttons which all have name=format.
             // User selects the format by clicking the appropriate button, which

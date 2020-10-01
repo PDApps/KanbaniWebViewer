@@ -5,13 +5,13 @@ namespace Kanbani;
 // array_column(), Throwable, ??.
 if (version_compare(PHP_VERSION, "7.0.0", "<")) {
     $msg = "Kanbani Web Viewer requires PHP 7+.";
-    if (!ini_get('display_errors')) {
+    if (!ini_get("display_errors")) {
         echo $msg;
     }
     throw new \RuntimeException($msg);
 }
 
-require_once 'helpers.php';
+require_once "helpers.php";
 
 $context = initializeGlobal();
 

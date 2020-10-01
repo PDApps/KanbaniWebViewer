@@ -33,7 +33,7 @@ $context->hooks->register("serve_export", function () use ($sendBoard) {
 });
 $context->hooks->register("serve_export", function () use ($sendBoard) {
     return $sendBoard($this, "kanbani", "application/octet-stream", "kanbani", function () {
-        if (empty($this->request['exportAll'])) {
+        if (empty($this->request["exportAll"])) {
             $this->syncData->boards = [$this->currentBoard];
         }
         $this->syncFile->data = $this->syncData->serializeToJSON();

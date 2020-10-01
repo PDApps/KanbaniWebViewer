@@ -28,7 +28,7 @@ $context->hooks->register("echo_boardBars", function () {
                             <?php }?>
                             <?php if ($card->due_time) {?>
                                 <span class="isle brd-toc__label card-due card-due_over_<?=+($card->due_time / 1000 < time())?>">
-                                    <?=htmlspecialchars($this(...Kanbani\formatTime($card->due_time / 1000)))?>
+                                    <?=htmlspecialchars(Kanbani\formatTime($this, $card->due_time / 1000))?>
                                 </span>
                             <?php }?>
                         </a>

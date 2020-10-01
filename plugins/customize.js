@@ -1,18 +1,18 @@
 // For Board only.
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'view'
+    this.name = this.name || "view"
     this.preview = null     // switching is too heavy.
 
     this._apply = function (target, value) {
         document.body.className = document.body.className
-            .replace(/\bbv_\w+|$/, ' bv_' + value)
+            .replace(/\bbv_\w+|$/, " bv_" + value)
     }
 })
 
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'archived'
+    this.name = this.name || "archived"
 
     this._apply = function (target, value) {
         target.filter(this.name, function (card) {
@@ -23,7 +23,7 @@ KanbaniWeb.customizers.push(function () {
 
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'relatedName'
+    this.name = this.name || "relatedName"
 
     this._apply = function (target, value) {
         target.node.classList.add("cust-rnfilter")
@@ -42,25 +42,25 @@ KanbaniWeb.customizers.push(function () {
 
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'sort'
+    this.name = this.name || "sort"
 
     this._apply = function (target, value) {
-        var prop = value.replace(/-/, '')
+        var prop = value.replace(/-/, "")
         target.sort(function (a, b) {
             a = a.data
             b = b.data
-            if (typeof a[prop] == 'number') {
+            if (typeof a[prop] == "number") {
                 var res = a[prop] - b[prop]
             } else {
                 var res = a[prop] > b[prop] ? +1 : -1
             }
-            return (value[0] == '-' ? -1 : +1) * res
+            return (value[0] == "-" ? -1 : +1) * res
         })
     }
 
     this.cancel = function (target) {
         ;(target || this.target).sort()
-        target || this.hooks.dispatchEvent(new Event('cancel'))
+        target || this.hooks.dispatchEvent(new Event("cancel"))
     }
 })
 
@@ -68,26 +68,26 @@ KanbaniWeb.customizers.push(function () {
 // Requires that target object has a node property (Element).
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'cardColors'
+    this.name = this.name || "cardColors"
 
     this._apply = function (target, value) {
         target.node.className = target.node.className
-            .replace(/\blists_bg-mode_\w+/g, '')
-            + ' lists_bg-mode_' + value
+            .replace(/\blists_bg-mode_\w+/g, "")
+            + " lists_bg-mode_" + value
     }
 })
 
 KanbaniWeb.customizers.push(function () {
     KanbaniWeb.Customizer.apply(this, arguments)
-    this.name = this.name || 'filter'
+    this.name = this.name || "filter"
     this.default = ""
     var timer = null
 
     this.hook = function () {
-        this.node.addEventListener('change', this.schedule)
-        this.node.addEventListener('click', this.schedule)
-        this.node.addEventListener('keypress', this.schedule)
-        this.node.addEventListener('keyup', this.schedule)
+        this.node.addEventListener("change", this.schedule)
+        this.node.addEventListener("click", this.schedule)
+        this.node.addEventListener("keypress", this.schedule)
+        this.node.addEventListener("keyup", this.schedule)
     }
 
     this.schedule = function (e) {
@@ -101,14 +101,14 @@ KanbaniWeb.customizers.push(function () {
 
     this.apply = function (target) {
         var re = this.node.value.split(/\s+/)
-            .map(KanbaniWeb.escapeRegExp).join('|')
+            .map(KanbaniWeb.escapeRegExp).join("|")
 
         if (re.length) {
-            re = new RegExp(re, 'i')
+            re = new RegExp(re, "i")
             ;(target || this.target).filter(this.name, function (card) {
                 return re.test(card.data.title + card.data.description)
             })
-            target || this.hooks.dispatchEvent(new Event('apply'))
+            target || this.hooks.dispatchEvent(new Event("apply"))
         } else {
             this.cancel(target)
         }

@@ -21,7 +21,7 @@ $context->hooks->registerFirst("echo_cardItem", function (array $vars) {
 </header>
 <?php if ($card->due_time) {?>
     <span class="isle card-item__due card-due card-due_over_<?=+($card->due_time / 1000 < time())?>">
-        <?=htmlspecialchars($this(...Kanbani\formatTime($card->due_time / 1000)))?>
+        <?=htmlspecialchars(Kanbani\formatTime($this, $card->due_time / 1000))?>
     </span>
 <?php }?>
 <?php

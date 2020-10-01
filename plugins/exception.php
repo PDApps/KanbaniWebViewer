@@ -33,7 +33,7 @@ $context->hooks->register("echo_exception", function (array $vars) {
             <?php if ($showMessage) {?>
                 <p><?=htmlspecialchars($this($exception->getMessage()))?></p>
             <?php } else {?>
-                <h1><?=$this("Uh-oh")?></h1>
+                <h1><?=$this("No way!")?></h1>
                 <p>
                     <?=$this(
                         "You hit an unexpected %s – contact us for assistance.",

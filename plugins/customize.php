@@ -49,7 +49,7 @@ $context->hooks->register("start", function () {
 });
 
 $context->hooks->register("echo_boardHeader", function (array $vars) {
-    // $filters 
+    // $filters
     extract($vars);
     extract($filters, EXTR_PREFIX_ALL, "f");
 
@@ -163,7 +163,7 @@ $context->hooks->register("echo_empty", function (array &$vars) {
 });
 
 $context->hooks->register("echo_listItem", function (array &$vars) {
-    $class = &$vars['attributes']['class'];
+    $class = &$vars["attributes"]["class"];
     $class .= " lists_bg-mode_".$this->request["cardColors"];
     if (strlen($this->request["relatedName"] ?? "")) {
         $class .= " cust-rnfilter";

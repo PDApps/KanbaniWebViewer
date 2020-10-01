@@ -35,7 +35,7 @@ class Hooks implements \ArrayAccess {
     }
 
     // Shortcut to the translate event:
-    // $hooks('foo %s', 'bar');
+    // $hooks("foo %s", "bar");
     // $hooks->trigger("translate", ["foo %s", "bar"]);
     function __invoke() {
         return $this->trigger("translate", func_get_args());
@@ -159,9 +159,9 @@ class Hooks implements \ArrayAccess {
 
     // Unregisters all hooks for an event excluding after.
     // unset and get can be used to wrap or disable existing hooks:
-    // $old = $hooks['event'];
-    // unset($hooks['event']);
-    // $hooks->register('wrapper', function () {
+    // $old = $hooks["event"];
+    // unset($hooks["event"]);
+    // $hooks->register("wrapper", function () {
     //     foreach ($old as $callback) ...
     // };
     // Restoration is currently not possible because get removes priority information.
@@ -222,8 +222,8 @@ class Context {
         foreach ($files as $key => &$value) {
             if (!isset($value["error"])) {
                 static::cleanFiles($value);    // <input name="file[]">
-            } elseif ($value['error'] || !is_uploaded_file($value['tmp_name'])) {
-                $error = $value['error'] ?: \UPLOAD_ERR_NO_FILE;
+            } elseif ($value["error"] || !is_uploaded_file($value["tmp_name"])) {
+                $error = $value["error"] ?: \UPLOAD_ERR_NO_FILE;
                 foreach (get_defined_constants() as $name => $value) {
                     if ($error === $value && !strncmp($name, "UPLOAD_ERR_", 11)) {
                         $error = ucwords(strtolower(strtr(substr($name, 11), "_", " ")));
@@ -236,7 +236,7 @@ class Context {
     }
 
     // Shortcut to the translate event:
-    // $context('foo %s', 'bar');
+    // $context("foo %s", "bar");
     // $context->hooks->trigger("translate", ["foo %s", "bar"]);
     function __invoke(...$args) {
         return $this->hooks->__invoke(...$args);
@@ -292,10 +292,10 @@ function initializeGlobal() {
     }, -1);
     error_reporting(-1);
     chdir(__DIR__);
-    // These are required because of baseQrCode in the config.
+    // These are required because of unserialize.qrCode in the config.
     // https://github.com/PDApps/KanbaniDataPHP
-    require_once 'kanbani-data/sync.php';
-    require_once 'kanbani-data/qrcode.php';
+    require_once "kanbani-data/sync.php";
+    require_once "kanbani-data/qrcode.php";
     $context = initialize();
     date_default_timezone_set($context->tz);
     if (!setlocale(LC_ALL, $context->locale)) {
@@ -359,38 +359,34 @@ function htmlAttributes(array $attrs) {
     return $result;
 }
 
-// Returns a ready to format string. This would return "in 2min":
-//     $hooks(...timeInterval(time() + 123));
-function timeInterval($to, $now = null) {
+function timeInterval($translator, $to, $now = null) {
     if ($now === null) { $now = time(); }
     $past = $to < $now;
-    $ago = $past ? '%s%s ago' : 'in %s%s';
+    $ago = $past ? "%s%s ago" : "in %s%s";
     $diff = abs($to - $now);
     if       ($diff > $p = 3600 * 24 * 360) {
-        return [$ago, round($diff / $p), 'y'];
+        return $translator($ago, round($diff / $p), $translator("y"));
     } elseif ($diff > $p = 3600 * 24 * 28) {
-        return [$ago, round($diff / $p), 'mo'];
+        return $translator($ago, round($diff / $p), $translator("mo"));
     } elseif ($diff > $p = 3600 * 24 * 7) {
-        return [$ago, round($diff / $p), 'w'];
+        return $translator($ago, round($diff / $p), $translator("w"));
     } elseif ($diff > $p = 3600 * 24) {
-        return [$ago, round($diff / $p), 'd'];
+        return $translator($ago, round($diff / $p), $translator("d"));
     } elseif ($diff > $p = 3600) {
-        return [$ago, round($diff / $p), 'h'];
+        return $translator($ago, round($diff / $p), $translator("h"));
     } elseif ($diff > $p = 60) {
-        return [$ago, round($diff / $p), 'min'];
+        return $translator($ago, round($diff / $p), $translator("min"));
     } elseif ($diff > 5) {
-        return [$ago, $diff, 's'];
+        return $translator($ago, $diff, $translator("s"));
     } else {
-        return ["now"];
+        return $translator("just now");
     }
 }
 
-function formatTime($time) {
+function formatTime($translator, $time) {
     // Omit the date for brevity if $time is today.
-    $format = date('ymd', $time) === date('ymd') ? '%X' : '%x %X';
-    $interval = timeInterval($time);
-    array_splice($interval, 0, 1, ["%s ($interval[0])", strftime($format, $time)]);
-    return $interval;
+    $format = date("ymd", $time) === date("ymd") ? "%X" : "%x %X";
+    return $translator("%s (%s)", strftime($format, $time), timeInterval($translator, $time));
 }
 
 function formatNumber($number, $decimals = 0) {

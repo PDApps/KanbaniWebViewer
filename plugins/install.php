@@ -14,7 +14,7 @@ if ($isInstalled) {
                 ];
                 $this
                     ->syncData(new SyncData([$stubBoard]))
-                    ->persistent(QrCodeData::randomIdentifier(), $this->config['baseQrCode'])
+                    ->persistent(QrCodeData::randomIdentifier(), $this->config["unserialize.qrCode"])
                     ->hooks->serve_qrImageProfile();
                 return true;
             default:
@@ -31,18 +31,18 @@ if ($isInstalled) {
 <article class="middle__out">
     <div class="middle__in middle__in_pad">
         <p><b><?=$this("Kanbani Web Viewer has been successfully configured and is ready for use!")?></b></p>
-        <?php if ($this->config["baseQrCode"]) {?>
+        <?php if ($this->config["unserialize.qrCode"]) {?>
             <p>
                 <?=$this(
                     "Start by syncing a profile from the %sKanbani app%s on your device, then following the link to the “online viewer” from that profile’s %sShare%s screen.",
-                    '<a href="https://pdapps.org/kanbani">', '</a>',
-                    '<b>', '</b>'
+                    '<a href="https://pdapps.org/kanbani">', "</a>",
+                    "<b>", "</b>"
                 )?>
             </p>
             <p>
                 <?=$this(
                     "A quick way to set up such a profile is by scanning the QR code below using Kanbani’s %sScan%s command from the main menu. You can also %sdownload this image%s and send it to somebody else.",
-                    '<b>', '</b>',
+                    "<b>", "</b>",
                     '<a href="?do=install&subdo=qr&dl=1">', "</a>"
                 )?>
             </p>
@@ -52,7 +52,7 @@ if ($isInstalled) {
             <p>
                 <?=$this(
                     "If you wish, you can browse the included “%sWelcome Board%s”.",
-                    '<a href="?profile=Welcome">', '</a>'
+                    '<a href="?profile=Welcome">', "</a>"
                 )?>
             </p>
         <?php }?>
@@ -60,7 +60,7 @@ if ($isInstalled) {
         <p>
             <?=$this(
                 "P.S. %sGet in touch%s in case of trouble.",
-                '<a href="https://pdapps.org/kanbani/forum">', '</a>'
+                '<a href="https://pdapps.org/kanbani/forum">', "</a>"
             )?>
         </p>
     </div>
@@ -202,8 +202,8 @@ $context->hooks->register("echo_install", function () {
                 <?=$this(
                     "Upload %sthis %s file%s to the %s directory (replace if exists)",
                     '<a href="?do=install&subdo=authdl">',
-                    '<b>admin.txt</b>',
-                    '</a>',
+                    "<b>admin.txt</b>",
+                    "</a>",
                     "<b>".$this->config["cache"]."</b>"
                 )?>
             </li>
@@ -260,7 +260,7 @@ $context->hooks->register("echo_installing", function (array $vars) {
                 <?=$this(
                     "Potential problems were found in your configuration. You can ignore them and finish or you can make adjustments and %scheck again%s.",
                     '<button type="submit" name="do" value="install&subdo=cfgcheck">',
-                    '</button>'
+                    "</button>"
                 )?>
             </p>
             <ul>
@@ -280,14 +280,14 @@ $context->hooks->register("echo_installing", function (array $vars) {
                         <?=$this(
                             "%sClick here%s to save the configuration",
                             '<button type="submit" name="do" value="install&subdo=cfgwrite">',
-                            '</button>'
+                            "</button>"
                         )?>
                     <?php } else {?>
                         <?=$this(
-                            "Upload %sthis %s file%s to the Viewer's directory (near %s)",
+                            "Upload %sthis %s file%s to the Viewer’s directory (near %s)",
                             '<button type="submit" name="do" value="install&subdo=cfgdl">',
-                            'config.php',
-                            '</button>',
+                            "config.php",
+                            "</button>",
                             "<b>index.php</b>"
                         )?>
                     <?php }?>
@@ -306,7 +306,7 @@ $context->hooks->register("echo_installing", function (array $vars) {
         <select name="i[qrTransport]" id="qrTransport">
             <?=htmlOptions(
                 array_merge([""], $transports),
-                array_merge(["Disable Kanbani integration"], $transports),
+                array_merge([$this("Disable Kanbani integration")], $transports),
                 $r_qrTransport ?? ""
             )?>
         </select>
@@ -348,7 +348,7 @@ $context->hooks->register("echo_installing", function (array $vars) {
 
     <h2><?=$this("Viewer plugins")?></h2>
     <p><?=$this("This Viewer comes with a variety of plugins that allow import boards from CSV, filter cards, customize the board’s look and so on.")?></p>
-    <p><?=$this("Uncheck a checkbox to disable a plugin, or leave them all checked to enable (recommended, doesn’t hurt).")?></p>
+    <p><?=$this("Uncheck a checkbox to disable a plugin, or leave them all checked to enable (recommended, extra functionality doesn’t hurt).")?></p>
     <?php foreach ($plugins as $plugin) {?>
         <?php if ($plugin["system"]) { continue; }?>
         <p>
@@ -365,13 +365,13 @@ $context->hooks->register("echo_installing", function (array $vars) {
     <?php }?>
 
     <h2><?=$this("Other settings")?></h2>
-    <p><?=$this("By default, visitors will see time in the timezone of their native language (and London's time for all English visitors).")?></p>
-    <p><?=$this("You can override this default timezone if most of your visitors are from a known location.")?></p>
+    <p><?=$this("By default, visitors will see time in the time zone of their native language (and London’s time for all English visitors).")?></p>
+    <p><?=$this("You can override this default time zone if most of your visitors are from a known location.")?></p>
     <p>
         <select name="i[tz]">
             <?=htmlOptions(
                 array_merge([""], $zones),
-                array_merge(["Use visitor's language timezone"], $zones),
+                array_merge([$this("Use visitor’s language time zone")], $zones),
                 $r_tz ?? ""
             )?>
         </select>
@@ -399,8 +399,8 @@ $context->hooks->register("buildConfig", function (object $result) {
     }
 
     if ($r_qrTransport) {
-        $result->prior[] = '';
-        $result->prior[] = '$baseQrCode = new Kanbani\\QrCodeData;';
+        $result->prior[] = "";
+        $result->prior[] = '$unserializeQrCode = new Kanbani\\QrCodeData;';
         if ($r_qrAuth === "pass") {
             $result->prior[] =  '$auth = new Kanbani\\QrCodePassword('.
                                 var_export($r_qrUser, true).
@@ -412,11 +412,11 @@ $context->hooks->register("buildConfig", function (object $result) {
         if (!class_exists($class)) {
             throw new PublicException("Transport class does not exist: $class.");
         }
-        $result->prior[] = '$baseQrCode->transport = new '.$class.'('.
+        $result->prior[] = '$unserializeQrCode->transport = new '.$class.'('.
                   var_export($r_qrURL, true).
                   ($r_qrAuth ? ', $auth' : '').
                   ');';
-        $result->config[] = '    "baseQrCode" => $baseQrCode,';
+        $result->config[] = '    "unserialize.qrCode" => $unserializeQrCode,';
         $result->config[] = '    "unserialize.path" => '.var_export($r_unserPath, true).',';
         if (method_exists($class, "testConnection")) {
             $obj = new $class($r_qrURL);
@@ -428,9 +428,9 @@ $context->hooks->register("buildConfig", function (object $result) {
             }
         }
         if (!is_dir($r_unserPath)) {
-            $result->warn[] = $this("Sync directory does not exist: $r_unserPath.");
+            $result->warn[] = $this("Sync directory does not exist: %s.", $r_unserPath);
         }
-        $result->prior[] = '';
+        $result->prior[] = "";
     }
 
     $disabled = array_filter($r_plugins, function ($v) { return !$v; });

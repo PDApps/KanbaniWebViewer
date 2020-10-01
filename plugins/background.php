@@ -29,7 +29,7 @@ if ($backgrounds) {
 
     $context->hooks->registerFirst("echo_boardCustomize", function () use ($current, $backgrounds) {
         $titles = array_map(function ($url) {
-            return ucwords(strtr(basename($url, strrchr($url, ".")), '-_.', '   '));
+            return ucwords(strtr(basename($url, strrchr($url, ".")), "-_.", "   "));
         }, $backgrounds);
 ?>
         <tr>

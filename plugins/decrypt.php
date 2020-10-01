@@ -41,7 +41,7 @@ $context->hooks->register("serve_decrypt", function () {
         $value = strlen($secret).",$secret,".preg_replace('/[;\s]+/', ",", $ids);
         $this->cookie("kwvdecr_$profileID", $value);
         if ($this->request["redir"] ?? 1) {
-            header("Location: ".$this->hooks->canonical(['profile' => $profileID]));
+            header("Location: ".$this->hooks->canonical(["profile" => $profileID]));
         } else {
             // JavaScriptless lass.
             echo $this("Settings saved. Reload this page.");
@@ -77,7 +77,7 @@ $context->hooks->register("echo_decrypt", function (array $vars) use ($parseCook
     <p>
         <button type="submit"><b><?=$this("Unlock")?></b></button>
         <?php if ($this->cookie("kwvdecr_$profileID")) {?>
-            <b><?=$this("(It wasn't possible to unlock it with the info you supplied last time.)")?></b>
+            <b><?=$this("(It wasn’t possible to unlock it with the info you supplied last time.)")?></b>
         <?php }?>
     </p>
     <p><?=$this("These details will be stored in a temporary cookie on your computer. The cookie will be erased when you exit your browser, and you will have to unlock the profile again.")?></p>

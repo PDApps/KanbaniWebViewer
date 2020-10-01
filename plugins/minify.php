@@ -12,22 +12,22 @@
 
 namespace Kanbani;
 
-if ($cache = $context->config['cache']) {
-    $context->hooks->registerFirst('echo_empty', function (array &$vars) use ($cache) {
+if ($cache = $context->config["cache"]) {
+    $context->hooks->registerFirst("echo_empty", function (array &$vars) use ($cache) {
         // $css
         // $js
         extract($vars, EXTR_REFS);
-        foreach (['css', 'js'] as $var) {
-            $all = array_filter($$var, 'is_file');
+        foreach (["css", "js"] as $var) {
+            $all = array_filter($$var, "is_file");
             if ($all) {     // keep only local files.
-                $latest = max(array_map('filemtime', $all));
+                $latest = max(array_map("filemtime", $all));
                 $file = "$cache/".hash("sha1", join("*", $all)).".$latest.$var";
                 if (!is_file($file)) {
                     $temp = tempnam($cache, $var);
                     try {
                         // Not using $output because it can corrupt Unicode.
-                        exec('minify -o'.escapeshellarg($temp).' '.
-                                join(' ', array_map('escapeshellarg', $all)),
+                        exec("minify -o".escapeshellarg($temp)." ".
+                                join(" ", array_map("escapeshellarg", $all)),
                              $output, $code);
                         if (!$code && filesize($temp)) {
                             rename($temp, $file);

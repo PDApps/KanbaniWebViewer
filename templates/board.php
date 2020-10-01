@@ -5,7 +5,7 @@ $context->hooks->registerLast("echo_board", function (array $vars) {
 ?>
 <header class="horiz-bar" data-kwv-board-customizations>
     <input data-kwv-override type="checkbox" class="cust__override"
-           title="<?=$this("Check to use the global filter for this list, uncheck to specify custom")?>">
+           title="<?=$this("Check to use the global setting for this list, uncheck to specify custom.")?>">
     <form action="">
         <input type="hidden" name="profile" value="<?=$this->profileID?>">
         <?php if (count($this->syncData->boards) > 1) {?>

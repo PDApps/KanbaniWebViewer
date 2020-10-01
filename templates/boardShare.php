@@ -1,7 +1,7 @@
 <?php
 $context->hooks->registerLast("echo_boardShare", function () {
     $qrImageProfile = "?do=qrImageProfile&profile=".rawurlencode($this->profileID);
-    $qrImageWeb = $this->hooks->canonical(['profile' => $this->profileID]);
+    $qrImageWeb = $this->hooks->canonical(["profile" => $this->profileID]);
     $qrImageWebImage = $qrImageWeb.(strrchr($qrImageWeb, "?") ? "&" : "?")."do=qrImageWeb";
     parse_str($this->server["QUERY_STRING"], $query);
     $qrImageWebCurrent = $this->hooks->canonical(["do" => "qrImageWeb"] + $query);

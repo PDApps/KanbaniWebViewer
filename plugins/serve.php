@@ -26,7 +26,7 @@ $context->hooks->register("serve_viewBoard", function () {
         $this->hooks->echo_empty([
             "title" => $this("%s | Kanbani Web Viewer", $this->currentBoard->title),
             "body"  => $this->hooks->template("board", [
-                'filters' => $this->request,
+                "filters" => $this->request,
             ]),
         ]);
     } else {
@@ -57,7 +57,7 @@ $context->hooks->register("serve_viewCard", function () {
 
 $serveQR = function ($context, $data, QrCodeData $kanbaniQrCode = null) {
     $headers = [];
-    $large = !empty($context->request['dl']);
+    $large = !empty($context->request["dl"]);
     $vars = compact("headers", "large", "data", "kanbaniQrCode");
     ob_start();
     $context->hooks->trigger("echo_qrCode", [&$vars]);
@@ -97,9 +97,9 @@ $context->hooks->register("serve_qrImageWeb", function () use ($serveQR) {
     if (!$this->profileID) {
         throw new PublicException("This board is transient and cannot be viewed elsewhere.");
     }
-    parse_str($this->server['QUERY_STRING'], $query);
-    unset($query['do']);
-    unset($query['dl']);
+    parse_str($this->server["QUERY_STRING"], $query);
+    unset($query["do"]);
+    unset($query["dl"]);
     $data = $this->hooks->canonical($query);
     // Encoding ~ is not necessary in URL components, see the comment in kwv.js. Makes the image larger.
     return $serveQR($this, str_replace("%7E", "~", $data));

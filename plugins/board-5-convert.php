@@ -25,7 +25,7 @@ $context->hooks->register("echo_boardHeader", function () {
             <p>
                 <?=$this(
                     "%sThis board is only available for viewing until you close this page.%s It is not stored on this server and cannot be accessed by other devices.",
-                    '<b>', '</b>'
+                    "<b>", "</b>"
                 )?>
             </p>
             <hr class="info-hint__hr">

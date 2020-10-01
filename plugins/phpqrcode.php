@@ -4,12 +4,12 @@
 // This is using the phpqrcode library: https://github.com/t0k4rt/phpqrcode
 // concatenated to the end of this file to simplify disabling/removing the plugin.
 
-$context->hooks->register('echo_qrCode', function (array &$vars) {
+$context->hooks->register("echo_qrCode", function (array &$vars) {
     // $data
     // $headers
     // $large
     extract($vars);
-    if (!function_exists('imagepng')) {
+    if (!function_exists("imagepng")) {
         throw new Kanbani\PublicException("QR code generation requires the php-gd extension.");
     }
     // QR code can't be read without a white/light margin around so adding

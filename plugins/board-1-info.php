@@ -11,7 +11,7 @@ $context->hooks->register("echo_boardHeader", function () {
     <abbr class="isle info-hint__title <?=$this->syncFile->isEncrypted() ? "hdr__encr" : ""?>"
     ><?=$this(
         $this->syncFile->isEncrypted() ? "%s (encrypted)" : "%s",
-        $this(...timeInterval($lastChanged))
+        timeInterval($this, $lastChanged)
     )?></abbr>
     <div class="info-hint__hint horiz-bar__child">
         <table class="tbl info-hint__tbl">
@@ -43,11 +43,11 @@ $context->hooks->register("echo_boardHeader", function () {
             </tr>
             <tr>
                 <th class="tbl__th"><?=$this("Created on:")?></th>
-                <td><?=htmlspecialchars($this(...formatTime($this->currentBoard->create_time / 1000)))?></td>
+                <td><?=htmlspecialchars(formatTime($this, $this->currentBoard->create_time / 1000))?></td>
             </tr>
             <tr>
                 <th class="tbl__th"><?=$this("Changed on:")?></th>
-                <td><?=htmlspecialchars($this(...formatTime($lastChanged)))?></td>
+                <td><?=htmlspecialchars(formatTime($this, $lastChanged))?></td>
             </tr>
             <tr>
                 <th class="tbl__th"><?=$this("Total cards:")?></th>

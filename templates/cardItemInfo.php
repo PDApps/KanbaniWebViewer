@@ -9,7 +9,7 @@ $context->hooks->registerLast("echo_cardItemInfo", function (array $vars) {
 </tr>
 <tr>
     <th class="tbl__th"><?=$this("Created on:")?></th>
-    <td><?=htmlspecialchars($this(...Kanbani\formatTime($card->create_time / 1000)))?></td>
+    <td><?=htmlspecialchars(Kanbani\formatTime($this, $card->create_time / 1000))?></td>
 </tr>
 <tr>
     <th class="tbl__th"><?=$this("Created by:")?></th>
@@ -17,7 +17,7 @@ $context->hooks->registerLast("echo_cardItemInfo", function (array $vars) {
 </tr>
 <tr>
     <th class="tbl__th"><?=$this("Changed on:")?></th>
-    <td><?=htmlspecialchars($this(...Kanbani\formatTime($card->change_time / 1000)))?></td>
+    <td><?=htmlspecialchars(Kanbani\formatTime($this, $card->change_time / 1000))?></td>
 </tr>
 <?php if (strlen($card->custom)) {?>
     <tr>

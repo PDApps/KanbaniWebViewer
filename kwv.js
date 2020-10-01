@@ -235,7 +235,7 @@ var KanbaniWeb = {
                 }
             }
             function preview(e) {
-                var override = (e.type == 'mousemove') == checkbox.checked
+                var override = (e.type == "mousemove") == checkbox.checked
                 override == cust.isOverridden || update(override)
             }
             checkbox.addEventListener("mousemove", preview)
@@ -298,11 +298,11 @@ var KanbaniWeb = {
         }
 
         this.push = function (obj) {
-            return this._pushState('pushState', obj)
+            return this._pushState("pushState", obj)
         }
 
         this.replace = function (obj) {
-            return this._pushState('replaceState', obj)
+            return this._pushState("replaceState", obj)
         }
 
         this._pushState = function (func, obj) {

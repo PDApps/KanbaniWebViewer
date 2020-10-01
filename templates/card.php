@@ -18,7 +18,7 @@ $context->hooks->registerLast("echo_card", function (array $vars) {
         <?php }?>
         <?php if ($card->due_time) {?>
             <span class="isle card-labels__label card-det__label card-due card-due_over_<?=+($card->due_time / 1000 < time())?>">
-                <?=htmlspecialchars($this(...Kanbani\formatTime($card->due_time / 1000)))?>
+                <?=htmlspecialchars(Kanbani\formatTime($this, $card->due_time / 1000))?>
             </span>
         <?php }?>
     </div>

@@ -3,8 +3,8 @@
    on this server's file system. Suitable for FTP, SFTP, WebDAV transports.
    Only !disable it if you have another plugin providing board data, like welcome.php. */
 
-$context->hooks->register('unserialize', function () {
-    $profile = $this->request['profile'] ?? '';
+$context->hooks->register("unserialize", function () {
+    $profile = $this->request["profile"] ?? "";
     if (preg_match('/^[\w-]+$/', $profile) &&
             ($root = $this->config["unserialize.path"]) &&
             is_dir($path = "$root/$profile/boards")) {
@@ -15,7 +15,7 @@ $context->hooks->register('unserialize', function () {
                 $fileData = null;
                 $filePath = "$path/$file";
                 $filePaths[$filePath] = filemtime($filePath);
-                if ($cacheFile = $this->config['cache']) {
+                if ($cacheFile = $this->config["cache"]) {
                     $syncFile->unserializeHeader(file_get_contents($filePath));
                     $cacheFile = "$cacheFile/unser.".bin2hex($syncFile->hash);
                     try {
@@ -51,9 +51,9 @@ $context->hooks->register('unserialize', function () {
         if ($boards) {
             $this->custom->unserialize_files = $filePaths;
             $this->syncData(new Kanbani\SyncData($boards), $syncFile)
-                ->persistent($profile, $this->config['baseQrCode']);
+                ->persistent($profile, $this->config["unserialize.qrCode"]);
             foreach ($boards as $board) {
-                if ($board->id === ($this->request['board'] ?? '')) {
+                if ($board->id === ($this->request["board"] ?? "")) {
                     $this->currentBoard($board);
                 }
             }
@@ -62,7 +62,7 @@ $context->hooks->register('unserialize', function () {
     }
 });
 
-$context->hooks->register('updated', function () {
+$context->hooks->register("updated", function () {
     if ($files = ($this->custom->unserialize_files ?? [])) {
         clearstatcache();
         return array_map("filemtime", array_keys($files)) !== array_values($files);

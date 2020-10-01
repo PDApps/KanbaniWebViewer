@@ -13,7 +13,7 @@ $context->hooks->registerLast("echo_listItemInfo", function (array $vars) {
 </tr>
 <tr>
     <th class="tbl__th"><?=$this("Created on:")?></th>
-    <td><?=htmlspecialchars($this(...Kanbani\formatTime($list->create_time / 1000)))?></td>
+    <td><?=htmlspecialchars(Kanbani\formatTime($this, $list->create_time / 1000))?></td>
 </tr>
 <tr>
     <th class="tbl__th"><?=$this("Total cards:")?></th>
