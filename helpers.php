@@ -69,7 +69,7 @@ class Hooks implements \ArrayAccess {
     // all after hooks are always called.
     // The combination of first + after hooks can be used to implement caching.
     function trigger($event, array $args = []) {
-        if (preg_match('/^echo_([\w-.]+)$/', $event, $match)) {
+        if (preg_match('/^echo_([\w.-]+)$/', $event, $match)) {
             if (is_file($file = "templates/$match[1].php")) {
                 isolatedRequire($file, ["context" => $this->context, "hooks" => $this]);
             }
